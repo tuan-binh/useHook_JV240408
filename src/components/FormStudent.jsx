@@ -1,7 +1,9 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 function FormStudent() {
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState(
+    () => JSON.parse(localStorage.getItem('students')) || [],
+  );
 
   const [formStudent, setFormStudent] = useState({});
   // [1,2,3] <=> [{...},{...},{...}]
@@ -20,10 +22,13 @@ function FormStudent() {
     setStudents([...students, formStudent]);
   };
 
+  useEffect(() => {
+    localStorage.setItem('students', JSON.stringify(students));
+  }, [students]);
+
   return (
     <>
       <form action="" onSubmit={handleAddStudent}>
-        {console.log(formStudent)}
         <div>
           <label htmlFor="">NAME</label>
           <input type="text" name="fullName" onChange={handleChangeForm} />
@@ -36,7 +41,7 @@ function FormStudent() {
           <label htmlFor="">Gender</label>
           <input type="text" name="gender" onChange={handleChangeForm} />
         </div>
-        <button>ADD</button>
+        <button>add</button>
       </form>
       {JSON.stringify(students)}
     </>
